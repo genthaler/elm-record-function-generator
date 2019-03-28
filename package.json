@@ -1,14 +1,14 @@
 {
-  "name": "cucumber-elm-supervisor",
-  "description": "Supervisor module for Cucumber in Elm",
+  "name": "elm-record-function-generator",
+  "description": "Generate getters, setters and mappers for Elm records",
   "version": "0.0.1",
   "license": "BSD3",
   "author": "Gunther Enthaler <genthaler@users.noreply.github.com>",
-  "main": "supervisorWorker.js",
+  "main": "worker.js",
   "private": true,
-  "bin": "supervisor.js",
+  "bin": "worker.js",
   "scripts": {
-    "prepare": "elm make src/Supervisor/Main.elm --output=supervisorWorker.js",
+    "prepare": "elm make src/Main.elm --output=workerWorker.js",
     "test": "elm-test"
   },
   "dependencies": {},
