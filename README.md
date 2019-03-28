@@ -29,6 +29,6 @@ setRecordnamePropertyname : Propertytype -> Recordtype -> Recordtype -- `setReco
 - Point free
 - Point full
 
-###Misc
+### Misc
 - Provide instructions on how to clone and customize for github & npm
 
