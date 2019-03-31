@@ -6,6 +6,8 @@ import Cli.Program as Program
 import Dict
 import Elm.Parser
 import Elm.Processing
+import Elm.Syntax.File
+import Elm.Writer
 import Json.Decode as D
 import Json.Decode.Extra as JDE
 import Json.Encode as E
@@ -64,7 +66,7 @@ message msg =
 
 init : Program.FlagsIncludingArgv flags -> Options -> ( Model, Cmd Response )
 init flags options =
-    ( toStarting { files = options.inputFiles }, Cmd.none )
+    ( toStarting { files = options.inputFiles }, message NoOp )
 
 
 parse : String -> String
@@ -95,12 +97,12 @@ parse input =
                 file1 =
                     { file0 | declarations = declarations0, comments = comments0 }
             in
-            "Success: " ++ Debug.toString v
+            file0 |> Elm.Writer.writeFile |> Elm.Writer.write
 
 
 update : Options -> Response -> Model -> ( Model, Cmd Response )
 update _ msg model =
-    (case Debug.log (Debug.toString msg) ( model, msg ) of
+    (case ( model, msg ) of
         ( _, Stderr stderr ) ->
             Err stderr
 
@@ -115,12 +117,12 @@ update _ msg model =
         ( ReadingFile ((State { files, file }) as state), Stdout content0 ) ->
             let
                 content1 =
-                    content0
+                    parse content0
             in
             Ok ( toWritingFile <| State { files = files }, fileWriteRequest file content1 )
 
-        ( WritingFile (State state), NoOp ) ->
-            Ok ( toStarting state, Cmd.none )
+        ( WritingFile (State state), Stdout _ ) ->
+            Ok ( toStarting state, message NoOp )
 
         ( state, cmd ) ->
             let

@@ -23,15 +23,15 @@ rulesWorker.ports.request.subscribe(
         break
 
       case "FileRead":
-        send(shell.cat(path.resolve.apply(null, cmd.paths)))
+        send(shell.cat(path.resolve(cmd.file)))
         break
 
       case "FileWrite":
-        send(shell.echo(cmd.fileContent).to(path.resolve.apply(null, cmd.paths)))
+        send(shell.ShellString(cmd.content).to(path.resolve(cmd.file)))
         break
 
       case "FileList":
-        glob(cmd.glob, { cwd: path.resolve.apply(null, cmd.cwd) }, (er, files) => {
+        glob(cmd.glob, { cwd: path.resolve(cmd.cwd) }, (er, files) => {
           if (er == null) {
             send({
               code: 0,
